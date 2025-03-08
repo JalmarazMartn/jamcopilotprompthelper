@@ -48,20 +48,173 @@
             outline: none;
             border-color: #0078d7;
         }
+        
+        /* Specific height for selected controls */
+        #inputIndications, #inputExample, #outputExample {
+            min-height: 50px;
+        }
+        
+        /* Styles for collapsible controls */
+        .rtf-control.collapsed {
+            min-height: 20px;
+            max-height: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .collapse-btn {
+            cursor: pointer;
+            display: inline-block;
+            margin-right: 5px;
+            font-size: 14px;
+            color: #666;
+            user-select: none;
+        }
+        
+        .control-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+        
+        button {
+            padding: 8px 16px;
+            background-color: #0078d7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        button:hover {
+            background-color: #0063b1;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Copilot Prompt Helper</h1>
+        <div class="header-container">
+            <h1>Copilot Prompt Helper</h1>
+            <div class="button-container">
+                <button onclick="savePrompt()">Save</button>
+                <button onclick="testPrompt()">Test</button>
+            </div>
+        </div>
         <div id="taskTitle" class="textbox" contenteditable="true">
             Enter your task title here...
         </div>
         <br>
+        <div class="control-header">
+            <span class="collapse-btn" data-target="taskExplanation">▼</span>
+            <span>Task Explanation</span>
+        </div>
         <div id="taskExplanation" class="rtf-control" contenteditable="true">
             Enter your task explanation here...
         </div>
+        <br>
+        <div class="control-header">
+            <span class="collapse-btn" data-target="inputIndications">▼</span>
+            <span>Input Indications</span>
+        </div>
+        <div id="inputIndications" class="rtf-control" contenteditable="true">
+            Enter your input indications here...
+        </div>
+        <br>
+        <div class="control-header">
+            <span class="collapse-btn" data-target="inputExample">▼</span>
+            <span>Input Example</span>
+        </div>
+        <div id="inputExample" class="rtf-control" contenteditable="true">
+            Enter your input example here...
+        </div>
+        <br>
+        <div class="control-header">
+            <span class="collapse-btn" data-target="outputExample">▼</span>
+            <span>Output Example</span>
+        </div>
+        <div id="outputExample" class="rtf-control" contenteditable="true">
+            Enter your output example here...
+        </div>
     </div>
     <script>
+        // Function called when Save button is clicked
+        function savePrompt() {
+            // Empty function as requested
+        }
+        
+        // Function called when Test button is clicked
+        function testPrompt() {
+            const promptData = createPromptJSON('Test');
+            const vscode = acquireVsCodeApi();
+            vscode.postMessage({
+                promptData
+            });
+
+        }
+        
+        // Function to create a JSON object with the content of all textbox and rtf-control elements
+        function createPromptJSON(commandDesc='') {
+            // Create an object to store the content
+            const promptData = {
+                command: commandDesc,
+                taskTitle: document.getElementById('taskTitle').textContent.trim(),
+                taskExplanation: document.getElementById('taskExplanation').textContent.trim(),
+                inputIndications: document.getElementById('inputIndications').textContent.trim(),
+                inputExample: document.getElementById('inputExample').textContent.trim(),
+                outputExample: document.getElementById('outputExample').textContent.trim()
+            };           
+            // Return the JSON object
+            return promptData;
+        }
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all collapse buttons
+            const collapseButtons = document.querySelectorAll('.collapse-btn');
+            
+            // Set all controls to collapsed state by default
+            collapseButtons.forEach(button => {
+                const targetId = button.getAttribute('data-target');
+                const targetElement = document.getElementById(targetId);
+                
+                // Add collapsed class
+                targetElement.classList.add('collapsed');
+                
+                // Set button to collapsed state
+                button.textContent = '►';
+                
+                // Add click event listener to each button
+                button.addEventListener('click', function() {
+                    // Get the target element ID
+                    const targetId = this.getAttribute('data-target');
+                    const targetElement = document.getElementById(targetId);
+                    
+                    // Toggle the collapsed class
+                    targetElement.classList.toggle('collapsed');
+                    
+                    // Update the button icon
+                    if (targetElement.classList.contains('collapsed')) {
+                        this.textContent = '►'; // Collapsed state
+                    } else {
+                        this.textContent = '▼'; // Expanded state
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>
