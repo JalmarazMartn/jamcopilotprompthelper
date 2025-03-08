@@ -48,12 +48,6 @@
             outline: none;
             border-color: #0078d7;
         }
-        
-        /* Specific height for selected controls */
-        #inputIndications, #inputExample, #outputExample {
-            min-height: 50px;
-        }
-        
         /* Styles for collapsible controls */
         .rtf-control.collapsed {
             min-height: 20px;
@@ -83,12 +77,57 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
         
         .button-container {
             display: flex;
             gap: 10px;
+        }
+        
+        .dropdown-container {
+            margin-bottom: 20px;
+        }
+        
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            width: 500px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 4px;
+            padding: 10px;
+            left: 0; /* Ensure it starts from the left edge of the dropdown */
+            box-sizing: border-box; /* Include padding in width calculation */
+        }
+        
+        .dropdown-btn {
+            text-align: left;
+        }
+        
+        .dropdown-content button {
+            width: auto;
+            text-align: center;
+            margin: 5px 0;
+        }
+        
+        .show {
+            display: block;
+        }
+        
+        .small-rtf {
+            min-height: 60px !important;
+            max-height: 60px;
+            margin-top: 10px;
+            width: 100%;
+            box-sizing: border-box; /* Include padding in width calculation */
+            overflow-x: hidden; /* Prevent horizontal overflow */
         }
         
         button {
@@ -112,7 +151,6 @@
             <h1>Copilot Prompt Helper</h1>
             <div class="button-container">
                 <button onclick="savePrompt()">Save</button>
-                <button onclick="testPrompt()">Test</button>
             </div>
         </div>
         <div id="taskTitle" class="textbox" contenteditable="true">
@@ -150,6 +188,18 @@
         <div id="outputExample" class="rtf-control" contenteditable="true">
             Enter your output example here...
         </div>
+        <br>
+        <div class="dropdown-container">
+            <div class="dropdown">
+                <button onclick="toggleDropdown()" class="dropdown-btn">Testing ▼</button>
+                <div id="dropdown-content" class="dropdown-content">
+                    <div id="inputTest" class="rtf-control small-rtf" contenteditable="true">
+                        Enter your input test here...
+                    </div>
+                    <button onclick="testPrompt()">Test</button>                    
+                </div>
+            </div>
+        </div>
     </div>
     <script>
         // Function called when Save button is clicked
@@ -167,6 +217,40 @@
 
         }
         
+        // Function to toggle dropdown visibility
+        function toggleDropdown() {
+            const dropdown = document.getElementById("dropdown-content");
+            dropdown.classList.toggle("show");
+            
+            // Check if dropdown would overflow the viewport and adjust if needed
+            if (dropdown.classList.contains("show")) {
+                const rect = dropdown.getBoundingClientRect();
+                const viewportWidth = window.innerWidth;
+                
+                if (rect.right > viewportWidth) {
+                    // If it overflows, adjust position
+                    dropdown.style.left = "auto";
+                    dropdown.style.right = "0";
+                }
+            }
+        }
+        
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function(event) {
+            // Don't close if clicking on the dropdown button or inside the inputTest element
+            if (!event.target.matches('.dropdown-btn') && 
+                !event.target.closest('#inputTest') && 
+                !event.target.matches('#dropdown-content button')) {
+                const dropdowns = document.getElementsByClassName("dropdown-content");
+                for (let i = 0; i < dropdowns.length; i++) {
+                    const openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+        
         // Function to create a JSON object with the content of all textbox and rtf-control elements
         function createPromptJSON(commandDesc='') {
             // Create an object to store the content
@@ -176,8 +260,9 @@
                 taskExplanation: document.getElementById('taskExplanation').textContent.trim(),
                 inputIndications: document.getElementById('inputIndications').textContent.trim(),
                 inputExample: document.getElementById('inputExample').textContent.trim(),
-                outputExample: document.getElementById('outputExample').textContent.trim()
-            };           
+                outputExample: document.getElementById('outputExample').textContent.trim(),
+                inputTest: document.getElementById('inputTest') ? document.getElementById('inputTest').textContent.trim() : ''
+            };
             // Return the JSON object
             return promptData;
         }
