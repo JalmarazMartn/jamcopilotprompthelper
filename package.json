@@ -1,31 +1,42 @@
 {
-  "name": "jamcopilotprompthelper",
-	"displayName": "JAMCopilotPromptHelper",
-	"description": "Create and save new small prompts for co-pilot",
-	"version": "0.0.1",
-	"engines": {
-		"vscode": "^1.98.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
-        "onCommand:jamcopilotprompthelper.helloWorld"
-	],
-	"main": "./extension.js",
-	"contributes": {
-		"commands": [{
-            "command": "jamcopilotprompthelper.helloWorld",
-            "title": "Hello World"
-
-		}]
-	},
-	"scripts": {
-		"lint": "eslint .",
-		"pretest": "npm run lint",
-		"test": "node ./test/runTest.js"
-	},
-	"devDependencies": {
+    "name": "jamcopilotprompthelper",
+    "displayName": "JAMCopilotPromptHelper",
+    "description": "Create and save new small prompts for co-pilot",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.70.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "author": {
+        "name": "Jesús Almaraz Martín",
+        "email": "JalmarazMartn@gmail.com"
+    },
+    "activationEvents": [
+    ],
+    "main": "./extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "jamcopilotprompthelper.createPrompt",
+                "title": "JAM Open a panel to create a new prompt"
+            }
+        ],
+        "menus": {
+            "commandPalette": [
+                {
+                    "command": "jamcopilotprompthelper.createPrompt"
+                }
+            ]
+        }
+    },
+    "scripts": {
+        "lint": "eslint .",
+        "pretest": "npm run lint",
+        "test": "node ./test/runTest.js"
+    },
+    "devDependencies": {
         "@types/vscode": "^1.98.0",
         "@types/glob": "^7.1.4",
         "@types/mocha": "^9.0.0",
@@ -36,5 +47,4 @@
         "typescript": "^4.4.4",
         "@vscode/test-electron": "^1.6.2"
     }
-
 }
