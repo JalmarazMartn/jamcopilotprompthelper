@@ -2,7 +2,7 @@ const vscode = require('vscode');
 module.exports = {
     execPrompt: async function(prompt,inputText='')
     {
-        await execPrompt(prompt,inputText);
+        return await execPrompt(prompt,inputText);
     }
 }
 async function execPrompt(prompt,inputText='') {
@@ -16,9 +16,10 @@ async function execPrompt(prompt,inputText='') {
         vscode.LanguageModelChatMessage.User(prompt.taskExplanation),
         //Intructions: input is regex explanation and output two strings: one with only the regular expressión and other with a match example
         vscode.LanguageModelChatMessage.User('Example: input:' + prompt.inputExample + 'output:' + prompt.outputExample),
-        //  ["\\d{12}", "123456789012"]'),
-        vscode.LanguageModelChatMessage.User(prompt.inputIndications + inputText)
-        //Generate a regex for the following explanation
+        //12 digits
+        //  ["\d{12}", "123456789012"]
+        vscode.LanguageModelChatMessage.User(prompt.inputIndications +' ' + inputText)
+        //Generate a regex for the following explanation: 
     ];
     try {
         chatResponse = await models[0].sendRequest(
@@ -32,7 +33,7 @@ async function execPrompt(prompt,inputText='') {
         } else {
             throw err;
         }
-        return;
+        return '';
     }
 
     try {
@@ -42,9 +43,11 @@ async function execPrompt(prompt,inputText='') {
         for await (const fragment of chatResponse.text) {
             totalResponse += fragment                
         }
-        vscode.window.showInformationMessage(`Generated Regex: ${totalResponse}`);
+        vscode.window.showInformationMessage(`reponse: ${totalResponse}`);
+        return totalResponse;
     } catch (err) {
-        vscode.window.showErrorMessage(`Failed to generate regex: ${err.message}`);
+        vscode.window.showErrorMessage(`Failed : ${err.message}`);
+        return '';
     }
 }
 
