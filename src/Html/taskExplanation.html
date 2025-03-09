@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,17 +13,17 @@
             background-color: #f5f5f5;
             color: #333;
         }
-        
+
         .container {
             max-width: 800px;
             margin: 0 auto;
         }
-        
+
         h1 {
             color: #333;
             margin-bottom: 20px;
         }
-        
+
         .rtf-control {
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -33,6 +34,7 @@
             overflow-y: auto;
             line-height: 1.5;
         }
+
         .textbox {
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -43,11 +45,12 @@
             overflow-y: auto;
             line-height: 1.5;
         }
-        
+
         .rtf-control:focus {
             outline: none;
             border-color: #0078d7;
         }
+
         /* Styles for collapsible controls */
         .rtf-control.collapsed {
             min-height: 20px;
@@ -55,7 +58,7 @@
             overflow: hidden;
             position: relative;
         }
-        
+
         .collapse-btn {
             cursor: pointer;
             display: inline-block;
@@ -64,7 +67,7 @@
             color: #666;
             user-select: none;
         }
-        
+
         .control-header {
             display: flex;
             align-items: center;
@@ -72,64 +75,68 @@
             font-weight: bold;
             color: #555;
         }
-        
+
         .header-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
         }
-        
+
         .button-container {
             display: flex;
             gap: 10px;
         }
-        
+
         .dropdown-container {
             margin-bottom: 20px;
         }
-        
+
         .dropdown {
             position: relative;
             display: inline-block;
         }
-        
+
         .dropdown-content {
             display: none;
             position: absolute;
             background-color: white;
             width: 500px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
             z-index: 1;
             border-radius: 4px;
             padding: 10px;
-            left: 0; /* Ensure it starts from the left edge of the dropdown */
-            box-sizing: border-box; /* Include padding in width calculation */
+            left: 0;
+            /* Ensure it starts from the left edge of the dropdown */
+            box-sizing: border-box;
+            /* Include padding in width calculation */
         }
-        
+
         .dropdown-btn {
             text-align: left;
         }
-        
+
         .dropdown-content button {
             width: auto;
             text-align: center;
             margin: 5px 0;
         }
-        
+
         .show {
             display: block;
         }
-        
+
         .small-rtf {
             min-height: 60px !important;
             max-height: 60px;
             margin-top: 10px;
             width: 100%;
-            box-sizing: border-box; /* Include padding in width calculation */
-            overflow-x: hidden; /* Prevent horizontal overflow */
+            box-sizing: border-box;
+            /* Include padding in width calculation */
+            overflow-x: hidden;
+            /* Prevent horizontal overflow */
         }
-        
+
         button {
             padding: 8px 16px;
             background-color: #0078d7;
@@ -139,30 +146,24 @@
             cursor: pointer;
             font-weight: 500;
         }
-        
+
         button:hover {
             background-color: #0063b1;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header-container">
             <h1>Copilot Prompt Helper</h1>
             <div class="button-container">
                 <button onclick="savePrompt()">Save</button>
+                <button onclick="openPrompt()">Open</button>
             </div>
         </div>
         <div id="taskTitle" class="textbox" contenteditable="true">
             Enter your task title here...
-        </div>
-        <br>
-        <div class="control-header">
-            <span class="collapse-btn" data-target="taskExplanation">▼</span>
-            <span>Task Explanation</span>
-        </div>
-        <div id="taskExplanation" class="rtf-control" contenteditable="true">
-            Enter your task explanation here...
         </div>
         <br>
         <div class="control-header">
@@ -171,6 +172,26 @@
         </div>
         <div id="inputIndications" class="rtf-control" contenteditable="true">
             Enter your input indications here...
+        </div>
+        <br>
+        <div class="dropdown-container">
+            <div class="dropdown">
+                <button onclick="toggleDropdown()" class="dropdown-btn">Testing ▼</button>
+                <div id="dropdown-content" class="dropdown-content">
+                    <div id="inputTest" class="rtf-control small-rtf" contenteditable="true">
+                        Enter your input test here...
+                    </div>
+                    <button onclick="testPrompt()">Test</button>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="control-header">
+            <span class="collapse-btn" data-target="taskExplanation">▼</span>
+            <span>Task Explanation</span>
+        </div>
+        <div id="taskExplanation" class="rtf-control" contenteditable="true">
+            Enter your task explanation here...
         </div>
         <br>
         <div class="control-header">
@@ -188,25 +209,24 @@
         <div id="outputExample" class="rtf-control" contenteditable="true">
             Enter your output example here...
         </div>
-        <br>
-        <div class="dropdown-container">
-            <div class="dropdown">
-                <button onclick="toggleDropdown()" class="dropdown-btn">Testing ▼</button>
-                <div id="dropdown-content" class="dropdown-content">
-                    <div id="inputTest" class="rtf-control small-rtf" contenteditable="true">
-                        Enter your input test here...
-                    </div>
-                    <button onclick="testPrompt()">Test</button>                    
-                </div>
-            </div>
-        </div>
     </div>
     <script>
         // Function called when Save button is clicked
         function savePrompt() {
-            // Empty function as requested
+            const promptData = createPromptJSON('Save');
+            const vscode = acquireVsCodeApi();
+            vscode.postMessage({
+                promptData
+            });
         }
-        
+        function openPrompt() {
+            const promptData = createPromptJSON('Open');
+            const vscode = acquireVsCodeApi();
+            vscode.postMessage({
+                promptData
+            });
+        }
+
         // Function called when Test button is clicked
         function testPrompt() {
             const promptData = createPromptJSON('Test');
@@ -216,17 +236,17 @@
             });
 
         }
-        
+
         // Function to toggle dropdown visibility
         function toggleDropdown() {
             const dropdown = document.getElementById("dropdown-content");
             dropdown.classList.toggle("show");
-            
+
             // Check if dropdown would overflow the viewport and adjust if needed
             if (dropdown.classList.contains("show")) {
                 const rect = dropdown.getBoundingClientRect();
                 const viewportWidth = window.innerWidth;
-                
+
                 if (rect.right > viewportWidth) {
                     // If it overflows, adjust position
                     dropdown.style.left = "auto";
@@ -234,12 +254,12 @@
                 }
             }
         }
-        
+
         // Close the dropdown if the user clicks outside of it
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             // Don't close if clicking on the dropdown button or inside the inputTest element
-            if (!event.target.matches('.dropdown-btn') && 
-                !event.target.closest('#inputTest') && 
+            if (!event.target.matches('.dropdown-btn') &&
+                !event.target.closest('#inputTest') &&
                 !event.target.matches('#dropdown-content button')) {
                 const dropdowns = document.getElementsByClassName("dropdown-content");
                 for (let i = 0; i < dropdowns.length; i++) {
@@ -250,9 +270,9 @@
                 }
             }
         }
-        
+
         // Function to create a JSON object with the content of all textbox and rtf-control elements
-        function createPromptJSON(commandDesc='') {
+        function createPromptJSON(commandDesc = '') {
             // Create an object to store the content
             const promptData = {
                 command: commandDesc,
@@ -266,31 +286,31 @@
             // Return the JSON object
             return promptData;
         }
-    
-        document.addEventListener('DOMContentLoaded', function() {
+
+        document.addEventListener('DOMContentLoaded', function () {
             // Get all collapse buttons
             const collapseButtons = document.querySelectorAll('.collapse-btn');
-            
+
             // Set all controls to collapsed state by default
             collapseButtons.forEach(button => {
                 const targetId = button.getAttribute('data-target');
                 const targetElement = document.getElementById(targetId);
-                
+
                 // Add collapsed class
                 targetElement.classList.add('collapsed');
-                
+
                 // Set button to collapsed state
                 button.textContent = '►';
-                
+
                 // Add click event listener to each button
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function () {
                     // Get the target element ID
                     const targetId = this.getAttribute('data-target');
                     const targetElement = document.getElementById(targetId);
-                    
+
                     // Toggle the collapsed class
                     targetElement.classList.toggle('collapsed');
-                    
+
                     // Update the button icon
                     if (targetElement.classList.contains('collapsed')) {
                         this.textContent = '►'; // Collapsed state
@@ -302,4 +322,5 @@
         });
     </script>
 </body>
+
 </html>
