@@ -176,12 +176,15 @@
         <br>
         <div class="dropdown-container">
             <div class="dropdown">
-                <button onclick="toggleDropdown()" class="dropdown-btn">Testing ▼</button>
+                <button onclick="toggleDropdown()" class="dropdown-btn">Ask ▼</button>
                 <div id="dropdown-content" class="dropdown-content">
                     <div id="inputTest" class="rtf-control small-rtf" contenteditable="true">
                         Enter your input test here...
                     </div>
-                    <button onclick="testPrompt()">Test</button>
+                    <button onclick="testPrompt()">Send</button>
+                    <div id="outputTest" class="rtf-control small-rtf" contenteditable="false">
+                        Response
+                    </div>
                 </div>
             </div>
         </div>

@@ -39,7 +39,8 @@ async function createPromptView(context) {
         const outputTest = await execPrompt.execPrompt(message.promptData, message.promptData.inputTest);
 
         // Use replaceHTMLContent to update the HTML with the promptData
-        updatedHTML = replaceHTMLContent(HTMLContent, message.promptData) + outputTest;
+        updatedHTML = replaceHTMLContent(HTMLContent, message.promptData);
+        updatedHTML = replaceResponse(updatedHTML,outputTest);
       }
       WebviewSteps.webview.html = updatedHTML + ExecNumber.toString() + '.' + message.promptData.command;
     },
@@ -102,5 +103,13 @@ function replaceHTMLContent(HTMLContent, promptData) {
     `<div id="inputTest" class="rtf-control small-rtf" contenteditable="true">${promptData.inputTest}</div>`
   );
 
+  return HTMLContent;
+}
+function replaceResponse(HTMLContent,Response)
+{
+  HTMLContent = HTMLContent.replace(
+    /<div id="outputTest" class="rtf-control small-rtf" contenteditable="false">\s*[^<]*<\/div>/,
+    `<div id="outputTest" class="rtf-control small-rtf" contenteditable="true">${Response}</div>`
+  );
   return HTMLContent;
 }
