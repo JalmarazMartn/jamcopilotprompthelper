@@ -280,17 +280,21 @@
             const promptData = {
                 command: commandDesc,
                 taskTitle: document.getElementById('taskTitle').textContent.trim(),
-                taskExplanation: document.getElementById('taskExplanation').textContent.trim(),
+                taskExplanation: document.getElementById('taskExplanation').innerHTML,
                 inputIndications: document.getElementById('inputIndications').textContent.trim(),
-                inputExample: document.getElementById('inputExample').textContent.trim(),
-                outputExample: document.getElementById('outputExample').textContent.trim(),
-                inputTest: document.getElementById('inputTest') ? document.getElementById('inputTest').textContent.trim() : ''
+                inputExample: document.getElementById('inputExample').innerHTML,
+                outputExample: document.getElementById('outputExample').innerHTML,
+                inputTest: document.getElementById('inputTest').innerHTML
             };
             // Return the JSON object
             return promptData;
         }
 
         document.addEventListener('DOMContentLoaded', function () {
+            // Show dropdown by default
+            const dropdownContent = document.getElementById('dropdown-content');
+            dropdownContent.classList.add('show');
+            
             // Get all collapse buttons
             const collapseButtons = document.querySelectorAll('.collapse-btn');
 

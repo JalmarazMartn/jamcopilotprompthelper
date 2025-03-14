@@ -25,8 +25,8 @@ async function createPromptView(context) {
         // Save the promptData to a file
         const savePrompt = require('./savePromt.js');
         savePrompt.savePrompt(message.promptData);
-        WebviewSteps.dispose();
-        return;
+        //WebviewSteps.dispose();
+        //return;
       }
       if (message.promptData.command === 'Open') {
         // Open the promptData from a file

@@ -43,7 +43,7 @@ async function execPrompt(prompt,inputText='') {
         for await (const fragment of chatResponse.text) {
             totalResponse += fragment                
         }
-        vscode.window.showInformationMessage(`reponse: ${totalResponse}`);
+        //vscode.window.showInformationMessage(`reponse: ${totalResponse}`);
         return totalResponse;
     } catch (err) {
         vscode.window.showErrorMessage(`Failed : ${err.message}`);

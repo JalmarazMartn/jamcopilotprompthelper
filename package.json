@@ -20,7 +20,7 @@
         "commands": [
             {
                 "command": "jamcopilotprompthelper.createPrompt",
-                "title": "JAM Open a panel to create a new prompt"
+                "title": "JAM Copilot Prompt Manager"
             }
         ],
         "menus": {
