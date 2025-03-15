@@ -29,6 +29,16 @@
                     "command": "jamcopilotprompthelper.createPrompt"
                 }
             ]
+        },
+        "configuration": {
+            "title": "JAM Copilot Prompt Helper",
+            "properties": {
+                "jamcopilotprompthelper.modelFamily": {
+                    "type": "string",
+                    "default": "gpt-4o",
+                    "description": "Family of language model to use"
+                }
+            }
         }
     },
     "scripts": {

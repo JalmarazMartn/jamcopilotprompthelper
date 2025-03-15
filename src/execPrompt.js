@@ -8,14 +8,14 @@ module.exports = {
 async function execPrompt(prompt,inputText='') {
     const models = await vscode.lm.selectChatModels({
         vendor: 'copilot',
-        family: 'gpt-4o'
+        family: getModelFamilyConfiguration()
     });
     let chatResponse;
 
     const messages = [            
         vscode.LanguageModelChatMessage.User(prompt.taskExplanation),
         //Intructions: input is regex explanation and output two strings: one with only the regular expressión and other with a match example
-        vscode.LanguageModelChatMessage.User('Example: input:' + prompt.inputExample + 'output:' + prompt.outputExample),
+        vscode.LanguageModelChatMessage.User('Example: when input:"' + prompt.inputExample + '", the output response must be:"' + prompt.outputExample+'"'),
         //12 digits
         //  ["\d{12}", "123456789012"]
         vscode.LanguageModelChatMessage.User(prompt.inputIndications +' ' + inputText)
@@ -49,5 +49,11 @@ async function execPrompt(prompt,inputText='') {
         vscode.window.showErrorMessage(`Failed : ${err.message}`);
         return '';
     }
+}
+function getModelFamilyConfiguration() {
+	const ExtConf = vscode.workspace.getConfiguration('');
+	if (ExtConf) {
+		return(ExtConf.get('jamcopilotprompthelper.modelFamily'));
+	}
 }
 
