@@ -1,9 +1,9 @@
 {
     "name": "jamcopilotpromptmanager",
-    "displayName": "jamcopilotpromptmanager",
+    "displayName": "JAM Copilot Prompt Manager",
     "description": "Create and save new small prompts for co-pilot",
     "publisher": "JessAlmarazMartin",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "repository": "https://github.com/JalmarazMartn/jamcopilotprompthelper",
     "icon": "images/PromptManager.png",
     "engines": {
