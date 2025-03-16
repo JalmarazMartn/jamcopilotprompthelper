@@ -1,8 +1,11 @@
 {
-    "name": "jamcopilotprompthelper",
-    "displayName": "JAMCopilotPromptHelper",
+    "name": "jamcopilotpromptmanager",
+    "displayName": "jamcopilotpromptmanager",
     "description": "Create and save new small prompts for co-pilot",
+    "publisher": "JessAlmarazMartin",
     "version": "0.0.1",
+    "repository": "https://github.com/JalmarazMartn/jamcopilotprompthelper",
+    "icon": "images/PromptManager.png",
     "engines": {
         "vscode": "^1.70.0"
     },
@@ -19,26 +22,26 @@
     "contributes": {
         "commands": [
             {
-                "command": "jamcopilotprompthelper.createPrompt",
+                "command": "jamcopilotpromptmanager.createPrompt",
                 "title": "JAM Copilot Prompt Manager"
             }
         ],
         "menus": {
             "commandPalette": [
                 {
-                    "command": "jamcopilotprompthelper.createPrompt"
+                    "command": "jamcopilotpromptmanager.createPrompt"
                 }
             ]
         },
         "configuration": {
-            "title": "JAM Copilot Prompt Helper",
+            "title": "JAM Copilot Prompt Manager",
             "properties": {
-                "jamcopilotprompthelper.modelVendor": {
+                "jamcopilotpromptmanager.modelVendor": {
                     "type": "string",
                     "default": "copilot",
                     "description": "Vendor of language model to use"
                 },
-                "jamcopilotprompthelper.modelFamily": {
+                "jamcopilotpromptmanager.modelFamily": {
                     "type": "string",
                     "default": "gpt-4o",
                     "description": "Family of language model to use"
@@ -52,7 +55,7 @@
         "test": "node ./test/runTest.js"
     },
     "devDependencies": {
-        "@types/vscode": "^1.98.0",
+        "@types/vscode": "^1.70.0",
         "@types/glob": "^7.1.4",
         "@types/mocha": "^9.0.0",
         "@types/node": "14.17.27",

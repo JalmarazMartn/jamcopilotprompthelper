@@ -53,13 +53,13 @@ async function execPrompt(prompt,inputText='') {
 function getModelFamilyConfiguration() {
 	const ExtConf = vscode.workspace.getConfiguration('');
 	if (ExtConf) {
-		return(ExtConf.get('jamcopilotprompthelper.modelFamily'));
+		return(ExtConf.get('jamcopilotpromptmanager.modelFamily'));
 	}
 }
 
 function getModelVendorConfiguration() {
 	const ExtConf = vscode.workspace.getConfiguration('');
 	if (ExtConf) {
-		return(ExtConf.get('jamcopilotprompthelper.modelVendor'));
+		return(ExtConf.get('jamcopilotpromptmanager.modelVendor'));
 	}
 }

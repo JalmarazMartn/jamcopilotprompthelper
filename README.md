@@ -1,6 +1,6 @@
-# jamcopilotprompthelper README
+# jamcopilotpromptmanager README
 
-This is the README for your extension "jamcopilotprompthelper". This extension allows you to create and save new small prompts for GitHub Copilot.
+This extension allows you to create and save new small prompts for GitHub Copilot.
 
 ## Features
 
@@ -16,7 +16,7 @@ This extension requires Visual Studio Code version 1.70.0 or higher.
 
 This extension contributes the following settings:
 
-* `jamcopilotprompthelper.modelFamily`: Specifies the family of language model to use. Default is `gpt-4o`.
+* `jamcopilotpromptmanager.modelFamily`: Specifies the family of language model to use. Default is `gpt-4o`.
 
 ## Known Issues
 

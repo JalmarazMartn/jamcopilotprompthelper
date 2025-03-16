@@ -9,8 +9,8 @@ module.exports = {
 async function createPromptView(context) {
   HTMLContent = await GetHTMLContent(context);
   const WebviewSteps = vscode.window.createWebviewPanel(
-    'Copilot Prompt Helper',
-    'Copilot Prompt Helper',
+    'Copilot Prompt Manager',
+    'Copilot Prompt Manager',
     vscode.ViewColumn.One,
     {
       enableScripts: true
@@ -20,6 +20,7 @@ async function createPromptView(context) {
   WebviewSteps.webview.onDidReceiveMessage(
     async function (message) {
       let updatedHTML = '';
+      let promptResponse = '';
       ExecNumber = ExecNumber + 1;
       if (message.promptData.command === 'Save') {
         // Save the promptData to a file
@@ -33,16 +34,17 @@ async function createPromptView(context) {
         const openPrompt = require('./savePromt.js');
         const promptData = await openPrompt.openPrompt();
         updatedHTML = replaceHTMLContent(HTMLContent, promptData);
+        updatedHTML = replaceisOpenOperation(updatedHTML);
       }
       else {
         const execPrompt = require('./execPrompt.js');
-        const outputTest = await execPrompt.execPrompt(message.promptData, message.promptData.inputTest);
+        promptResponse = await execPrompt.execPrompt(message.promptData, message.promptData.inputTest);
 
         // Use replaceHTMLContent to update the HTML with the promptData
         updatedHTML = replaceHTMLContent(HTMLContent, message.promptData);
-        updatedHTML = replaceResponse(updatedHTML,outputTest);
+        updatedHTML = replaceResponse(updatedHTML, promptResponse);
       }
-      WebviewSteps.webview.html = updatedHTML + ExecNumber.toString() + '.' + message.promptData.command;
+      WebviewSteps.webview.html = updatedHTML + ExecNumber.toString() + '.' + message.promptData.command + ' ' +promptResponse;
     },
     undefined,
     context.subscriptions
@@ -71,10 +73,10 @@ async function GetHTMLContent(context) {
   return FinalTable;
 }
 function replaceHTMLContent(HTMLContent, promptData) {
-  // Replace content in taskExplanation div
+  // Replace content in taskExplanation textarea
   HTMLContent = HTMLContent.replace(
-    /<div id="taskExplanation" class="rtf-control" contenteditable="true">\s*[^<]*<\/div>/,
-    `<div id="taskExplanation" class="rtf-control" contenteditable="true">${promptData.taskExplanation}</div>`
+    /<textarea id="taskExplanation" class="multiline-text">[^<]*<\/textarea>/,
+    `<textarea id="taskExplanation" class="multiline-text">${promptData.taskExplanation}</textarea>`
   );
 
   // Replace content in other controls if needed
@@ -84,32 +86,39 @@ function replaceHTMLContent(HTMLContent, promptData) {
   );
 
   HTMLContent = HTMLContent.replace(
-    /<div id="inputIndications" class="rtf-control" contenteditable="true">\s*[^<]*<\/div>/,
-    `<div id="inputIndications" class="rtf-control" contenteditable="true">${promptData.inputIndications}</div>`
+    /<textarea id="inputIndications" class="multiline-text">[^<]*<\/textarea>/,
+    `<textarea id="inputIndications" class="multiline-text">${promptData.inputIndications}</textarea>`
   );
 
   HTMLContent = HTMLContent.replace(
-    /<div id="inputExample" class="rtf-control" contenteditable="true">\s*[^<]*<\/div>/,
-    `<div id="inputExample" class="rtf-control" contenteditable="true">${promptData.inputExample}</div>`
+    /<textarea id="inputExample" class="multiline-text">[^<]*<\/textarea>/,
+    `<textarea id="inputExample" class="multiline-text">${promptData.inputExample}</textarea>`
   );
 
   HTMLContent = HTMLContent.replace(
-    /<div id="outputExample" class="rtf-control" contenteditable="true">\s*[^<]*<\/div>/,
-    `<div id="outputExample" class="rtf-control" contenteditable="true">${promptData.outputExample}</div>`
+    /<textarea id="outputExample" class="multiline-text">[^<]*<\/textarea>/,
+    `<textarea id="outputExample" class="multiline-text">${promptData.outputExample}</textarea>`
   );
 
   HTMLContent = HTMLContent.replace(
-    /<div id="inputTest" class="rtf-control small-rtf" contenteditable="true">\s*[^<]*<\/div>/,
-    `<div id="inputTest" class="rtf-control small-rtf" contenteditable="true">${promptData.inputTest}</div>`
+    /<textarea id="inputTest" class="multiline-text small-multiline">[^<]*<\/textarea>/,
+    `<textarea id="inputTest" class="multiline-text small-multiline">${promptData.inputTest}</textarea>`
   );
 
+  return HTMLContent;
+}
+function replaceisOpenOperation(HTMLContent) {
+  HTMLContent = HTMLContent.replace(
+    /let isOpenOperation = false;/,
+    `let isOpenOperation = true;`
+  );
   return HTMLContent;
 }
 function replaceResponse(HTMLContent,Response)
 {
   HTMLContent = HTMLContent.replace(
-    /<div id="outputTest" class="rtf-control small-rtf" contenteditable="false">\s*[^<]*<\/div>/,
-    `<div id="outputTest" class="rtf-control small-rtf" contenteditable="true">${Response}</div>`
+    /<div id="outputTest" class="multiline-text small-multiline" contenteditable="false">\s*[^<]*<\/div>/,
+    `<div id="outputTest" class="multiline-text small-multiline" contenteditable="true">${Response}</div>`
   );
   return HTMLContent;
 }

@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Copilot prompt Helper</title>
+    <title>Copilot prompt Manager</title>
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             padding: 20px;
             background-color: #f5f5f5;
@@ -24,44 +24,42 @@
             margin-bottom: 20px;
         }
 
-        .rtf-control {
+        .textbox,
+        .multiline-text {
             border: 1px solid #ccc;
             border-radius: 4px;
-            min-height: 300px;
-            padding: 10px;
+            padding: 2px;
             background-color: white;
             color: #333;
             overflow-y: auto;
             line-height: 1.5;
+            width: 100%;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            resize: vertical;
         }
 
         .textbox {
-            border: 1px solid #ccc;
-            border-radius: 4px;
             min-height: 10px;
-            padding: 10px;
-            background-color: white;
-            color: #333;
-            overflow-y: auto;
-            line-height: 1.5;
         }
 
-        .rtf-control:focus {
+        .multiline-text {
+            min-height: 300px;
+        }
+
+        .multiline-text:focus {
             outline: none;
             border-color: #0078d7;
         }
 
-        /* Styles for collapsible controls */
-        .rtf-control.collapsed {
+        .multiline-text.collapsed {
             min-height: 20px;
             max-height: 20px;
             overflow: hidden;
-            position: relative;
         }
 
         .collapse-btn {
             cursor: pointer;
-            display: inline-block;
             margin-right: 5px;
             font-size: 14px;
             color: #666;
@@ -88,53 +86,37 @@
             gap: 10px;
         }
 
-        .dropdown-container {
-            margin-bottom: 20px;
-        }
-
         .dropdown {
             position: relative;
-            display: inline-block;
+            display: block;
+            width: 100%;
         }
 
         .dropdown-content {
             display: none;
             position: absolute;
             background-color: white;
-            width: 500px;
+            width: 100%;
+            max-width: 800px;
             box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
             z-index: 1;
             border-radius: 4px;
             padding: 10px;
             left: 0;
-            /* Ensure it starts from the left edge of the dropdown */
             box-sizing: border-box;
-            /* Include padding in width calculation */
-        }
-
-        .dropdown-btn {
-            text-align: left;
-        }
-
-        .dropdown-content button {
-            width: auto;
-            text-align: center;
-            margin: 5px 0;
         }
 
         .show {
             display: block;
         }
 
-        .small-rtf {
-            min-height: 60px !important;
-            max-height: 60px;
+        .small-multiline {
+            min-height: 120px !important;
+            max-height: 120px;
             margin-top: 10px;
             width: 100%;
             box-sizing: border-box;
-            /* Include padding in width calculation */
             overflow-x: hidden;
-            /* Prevent horizontal overflow */
         }
 
         button {
@@ -156,174 +138,181 @@
 <body>
     <div class="container">
         <div class="header-container">
-            <h1>Copilot Prompt Helper</h1>
+            <h1>Copilot Prompt Manager</h1>
             <div class="button-container">
                 <button onclick="savePrompt()">Save</button>
                 <button onclick="openPrompt()">Open</button>
             </div>
         </div>
-        <div id="taskTitle" class="textbox" contenteditable="true">
-            Enter your task title here...
-        </div>
-        <br>
-        <div class="control-header">
-            <span class="collapse-btn" data-target="inputIndications">▼</span>
-            <span>Input Indications</span>
-        </div>
-        <div id="inputIndications" class="rtf-control" contenteditable="true">
-            Enter your input indications here...
-        </div>
-        <br>
-        <div class="dropdown-container">
-            <div class="dropdown">
-                <button onclick="toggleDropdown()" class="dropdown-btn">Ask ▼</button>
-                <div id="dropdown-content" class="dropdown-content">
-                    <div id="inputTest" class="rtf-control small-rtf" contenteditable="true">
-                        Enter your input test here...
-                    </div>
-                    <button onclick="testPrompt()">Send</button>
-                    <div id="outputTest" class="rtf-control small-rtf" contenteditable="false">
-                        Response
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div id="taskTitle" class="textbox" contenteditable="true">Enter your task title here...</div>
         <br>
         <div class="control-header">
             <span class="collapse-btn" data-target="taskExplanation">▼</span>
             <span>Task Explanation</span>
         </div>
-        <div id="taskExplanation" class="rtf-control" contenteditable="true">
-            Enter your task explanation here...
-        </div>
+        <textarea id="taskExplanation" class="multiline-text">Enter your task explanation here...</textarea>
         <br>
         <div class="control-header">
             <span class="collapse-btn" data-target="inputExample">▼</span>
             <span>Input Example</span>
         </div>
-        <div id="inputExample" class="rtf-control" contenteditable="true">
-            Enter your input example here...
-        </div>
+        <textarea id="inputExample" class="multiline-text">Enter your input example here...</textarea>
         <br>
         <div class="control-header">
             <span class="collapse-btn" data-target="outputExample">▼</span>
             <span>Output Example</span>
         </div>
-        <div id="outputExample" class="rtf-control" contenteditable="true">
-            Enter your output example here...
+        <textarea id="outputExample" class="multiline-text">Enter your output example here...</textarea>
+        <br>
+        <div class="control-header">
+            <span class="collapse-btn" data-target="inputIndications">▼</span>
+            <span>Input Indications</span>
+        </div>
+        <textarea id="inputIndications" class="multiline-text">Enter your input indications here...</textarea>
+        <br>
+        <div class="dropdown-container">
+            <div class="dropdown">
+                <button onclick="toggleDropdown()" class="dropdown-btn">Ask ▼</button>
+                <div id="dropdown-content" class="dropdown-content">
+                    <textarea id="inputTest" class="multiline-text small-multiline">Enter your input test here...</textarea>
+                    <button onclick="testPrompt()">Send</button>
+                    <div id="outputTest" class="multiline-text small-multiline" contenteditable="false">
+                        Response
+                    </div>    
+                </div>
+            </div>
         </div>
     </div>
     <script>
-        // Function called when Save button is clicked
+        // Initialize VS Code API once
+        const vscode = acquireVsCodeApi();
+        
+        // Function to save state to prevent losing content when webview loses focus
+        function saveState() {
+            const state = {
+                taskTitle: document.getElementById('taskTitle').textContent,
+                taskExplanation: document.getElementById('taskExplanation').value,
+                inputIndications: document.getElementById('inputIndications').value,
+                inputExample: document.getElementById('inputExample').value,
+                outputExample: document.getElementById('outputExample').value,
+                inputTest: document.getElementById('inputTest').value,
+            };
+            vscode.setState(state);
+        }
+        
         function savePrompt() {
             const promptData = createPromptJSON('Save');
-            const vscode = acquireVsCodeApi();
-            vscode.postMessage({
-                promptData
-            });
-        }
-        function openPrompt() {
-            const promptData = createPromptJSON('Open');
-            const vscode = acquireVsCodeApi();
-            vscode.postMessage({
-                promptData
-            });
+            vscode.postMessage({ promptData });
         }
 
-        // Function called when Test button is clicked
+        // Flag to track if we're in the middle of an Open operation
+        let isOpenOperation = false;
+        
+        function openPrompt() {
+            // Set flag to indicate we're in an Open operation
+            // Clear the saved state when opening a file
+            vscode.setState(null);
+            const promptData = createPromptJSON('Open');
+            vscode.postMessage({ promptData });
+        }
+
         function testPrompt() {
             const promptData = createPromptJSON('Test');
-            const vscode = acquireVsCodeApi();
-            vscode.postMessage({
-                promptData
-            });
-
+            vscode.postMessage({ promptData });
         }
 
-        // Function to toggle dropdown visibility
         function toggleDropdown() {
             const dropdown = document.getElementById("dropdown-content");
             dropdown.classList.toggle("show");
 
-            // Check if dropdown would overflow the viewport and adjust if needed
             if (dropdown.classList.contains("show")) {
                 const rect = dropdown.getBoundingClientRect();
-                const viewportWidth = window.innerWidth;
-
-                if (rect.right > viewportWidth) {
-                    // If it overflows, adjust position
+                if (rect.right > window.innerWidth) {
                     dropdown.style.left = "auto";
                     dropdown.style.right = "0";
                 }
             }
         }
 
-        // Close the dropdown if the user clicks outside of it
         window.onclick = function (event) {
-            // Don't close if clicking on the dropdown button or inside the inputTest element
             if (!event.target.matches('.dropdown-btn') &&
                 !event.target.closest('#inputTest') &&
                 !event.target.matches('#dropdown-content button')) {
                 const dropdowns = document.getElementsByClassName("dropdown-content");
                 for (let i = 0; i < dropdowns.length; i++) {
-                    const openDropdown = dropdowns[i];
-                    if (openDropdown.classList.contains('show')) {
-                        openDropdown.classList.remove('show');
-                    }
+                    dropdowns[i].classList.remove('show');
                 }
             }
         }
 
-        // Function to create a JSON object with the content of all textbox and rtf-control elements
         function createPromptJSON(commandDesc = '') {
-            // Create an object to store the content
-            const promptData = {
+            return {
                 command: commandDesc,
                 taskTitle: document.getElementById('taskTitle').textContent.trim(),
-                taskExplanation: document.getElementById('taskExplanation').innerHTML,
-                inputIndications: document.getElementById('inputIndications').textContent.trim(),
-                inputExample: document.getElementById('inputExample').innerHTML,
-                outputExample: document.getElementById('outputExample').innerHTML,
-                inputTest: document.getElementById('inputTest').innerHTML
+                taskExplanation: document.getElementById('taskExplanation').value,
+                inputIndications: document.getElementById('inputIndications').value,
+                inputExample: document.getElementById('inputExample').value,
+                outputExample: document.getElementById('outputExample').value,
+                inputTest: document.getElementById('inputTest').value
             };
-            // Return the JSON object
-            return promptData;
         }
 
+        // Listen for messages from the extension
+        window.addEventListener('message', event => {
+            const message = event.data;
+            // If we receive a message after an Open operation, reset the flag
+            // This indicates the Open operation is complete
+            if (isOpenOperation) {
+                isOpenOperation = false;
+            }
+        });
+        
         document.addEventListener('DOMContentLoaded', function () {
-            // Show dropdown by default
-            const dropdownContent = document.getElementById('dropdown-content');
-            dropdownContent.classList.add('show');
-            
-            // Get all collapse buttons
-            const collapseButtons = document.querySelectorAll('.collapse-btn');
+            document.getElementById('dropdown-content').classList.add('show');
 
-            // Set all controls to collapsed state by default
+            // Restore state if available and not in an open operation
+            if (!isOpenOperation) {
+                const previousState = vscode.getState();
+                if (previousState) {
+                    if (previousState.taskTitle) document.getElementById('taskTitle').textContent = previousState.taskTitle;
+                    if (previousState.taskExplanation) document.getElementById('taskExplanation').value = previousState.taskExplanation;
+                    if (previousState.inputIndications) document.getElementById('inputIndications').value = previousState.inputIndications;
+                    if (previousState.inputExample) document.getElementById('inputExample').value = previousState.inputExample;
+                    if (previousState.outputExample) document.getElementById('outputExample').value = previousState.outputExample;
+                    if (previousState.inputTest) document.getElementById('inputTest').value = previousState.inputTest;
+                }
+            }
+            // Add input event listeners to all editable elements and textareas to save state on change
+            const editableElements = document.querySelectorAll('[contenteditable="true"]');
+            editableElements.forEach(element => {
+                element.addEventListener('input', saveState);
+            });
+            
+            const textareaElements = document.querySelectorAll('textarea');
+            textareaElements.forEach(element => {
+                element.addEventListener('input', saveState);
+            });
+
+            // Save state when window loses focus
+            window.addEventListener('blur', saveState);
+            
+            // Save state periodically (every 5 seconds)
+            setInterval(saveState, 5000);
+
+            const collapseButtons = document.querySelectorAll('.collapse-btn');
             collapseButtons.forEach(button => {
                 const targetId = button.getAttribute('data-target');
                 const targetElement = document.getElementById(targetId);
 
-                // Add collapsed class
                 targetElement.classList.add('collapsed');
-
-                // Set button to collapsed state
                 button.textContent = '►';
 
-                // Add click event listener to each button
                 button.addEventListener('click', function () {
-                    // Get the target element ID
                     const targetId = this.getAttribute('data-target');
                     const targetElement = document.getElementById(targetId);
 
-                    // Toggle the collapsed class
                     targetElement.classList.toggle('collapsed');
-
-                    // Update the button icon
-                    if (targetElement.classList.contains('collapsed')) {
-                        this.textContent = '►'; // Collapsed state
-                    } else {
-                        this.textContent = '▼'; // Expanded state
-                    }
+                    this.textContent = targetElement.classList.contains('collapsed') ? '►' : '▼';
                 });
             });
         });
