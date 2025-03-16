@@ -33,6 +33,11 @@
         "configuration": {
             "title": "JAM Copilot Prompt Helper",
             "properties": {
+                "jamcopilotprompthelper.modelVendor": {
+                    "type": "string",
+                    "default": "copilot",
+                    "description": "Vendor of language model to use"
+                },
                 "jamcopilotprompthelper.modelFamily": {
                     "type": "string",
                     "default": "gpt-4o",

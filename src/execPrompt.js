@@ -7,7 +7,7 @@ module.exports = {
 }
 async function execPrompt(prompt,inputText='') {
     const models = await vscode.lm.selectChatModels({
-        vendor: 'copilot',
+        vendor: getModelVendorConfiguration(),
         family: getModelFamilyConfiguration()
     });
     let chatResponse;
@@ -57,3 +57,9 @@ function getModelFamilyConfiguration() {
 	}
 }
 
+function getModelVendorConfiguration() {
+	const ExtConf = vscode.workspace.getConfiguration('');
+	if (ExtConf) {
+		return(ExtConf.get('jamcopilotprompthelper.modelVendor'));
+	}
+}
