@@ -6,7 +6,8 @@ This extension allows you to create and save new small prompts for GitHub Copilo
 
 - **JAM Copilot Prompt Manager**: Opens a webview panel to create, save, and re-use prompts for GitHub Copilot. This command provides an interface where you can enter task titles, input indications, task explanations, input examples, and output examples. You can also test your prompts directly from the webview.
 
-![Create Prompt](images/create-prompt.png)
+![alt text](https://github.com/JalmarazMartn/jamcopilotprompthelper/blob/master/images/DefinePrompt.gif.gif?raw=true)
+
 
 ## Requirements
 
