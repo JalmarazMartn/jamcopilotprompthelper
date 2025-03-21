@@ -116,9 +116,12 @@ function replaceisOpenOperation(HTMLContent) {
 }
 function replaceResponse(HTMLContent,Response)
 {
+  // Replace newlines with <br> tags to preserve line breaks
+  const formattedResponse = Response.replace(/\n/g, '<br>');
+  
   HTMLContent = HTMLContent.replace(
     /<div id="outputTest" class="multiline-text small-multiline" contenteditable="false">\s*[^<]*<\/div>/,
-    `<div id="outputTest" class="multiline-text small-multiline" contenteditable="true">${Response}</div>`
+    `<div id="outputTest" class="multiline-text small-multiline" contenteditable="true">${formattedResponse}</div>`
   );
   return HTMLContent;
 }
