@@ -3,7 +3,7 @@
     "displayName": "JAM Copilot Prompt Manager",
     "description": "Create and save new small prompts for co-pilot",
     "publisher": "JessAlmarazMartin",
-    "version": "0.0.2",
+    "version": "0.0.4",
     "repository": "https://github.com/JalmarazMartn/jamcopilotprompthelper",
     "icon": "images/PromptManager.png",
     "engines": {
@@ -24,13 +24,41 @@
             {
                 "command": "jamcopilotpromptmanager.createPrompt",
                 "title": "JAM Copilot Prompt Manager"
+            },
+            {
+                "command": "jamcopilotpromptmanager.beginAutomatePtompt",
+                "title": "JAM Copilot Prompt Manager: Begin prompt recording"
+            },
+            {
+                "command": "jamcopilotpromptmanager.endAutomatePtompt",
+                "title": "JAM Copilot Prompt Manager: End prompt recording"
             }
         ],
         "menus": {
+            "editor/context": [
+				{
+					"when": "editorHasSelection && jamcopilotpromptmanager.dontShowNow",
+					"group": "1_modification",
+					"command": "jamcopilotpromptmanager.endAutomatePtompt"
+				},
+                {
+					"when": "editorHasSelection&& jamcopilotpromptmanager.dontShowNow",
+					"group": "1_modification",
+					"command": "jamcopilotpromptmanager.beginAutomatePtompt"
+				}
+			],
             "commandPalette": [
                 {
                     "command": "jamcopilotpromptmanager.createPrompt"
-                }
+                },
+                {
+                    "command": "jamcopilotpromptmanager.beginAutomatePtompt",
+                    "when": "editorHasSelection"
+                },
+                {
+                    "command": "jamcopilotpromptmanager.endAutomatePtompt",
+                    "when": "editorHasSelection && jamcopilotpromptmanager.enableEndAutomate"
+                }                
             ]
         },
         "configuration": {
@@ -44,6 +72,7 @@
                 "jamcopilotpromptmanager.modelFamily": {
                     "type": "string",
                     "default": "gpt-4o",
+                    "enum": ["gpt-3.5-turbo", "gpt-4o-mini", "gpt-3.5","gpt-4","gpt-4o","o3-mini","claude-3.5-sonnet","gemini-2.0-flash"],
                     "description": "Family of language model to use"
                 }
             }

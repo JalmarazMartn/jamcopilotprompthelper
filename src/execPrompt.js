@@ -3,13 +3,24 @@ module.exports = {
     execPrompt: async function(prompt,inputText='')
     {
         return await execPrompt(prompt,inputText);
-    }
+    },
+    /*showPromptAsHover: function()
+    {
+        showPromptAsHover();
+    }*/
 }
 async function execPrompt(prompt,inputText='') {
+//Poner    const allModels = await vscode.lm.selectChatModels({});
     const models = await vscode.lm.selectChatModels({
         vendor: getModelVendorConfiguration(),
         family: getModelFamilyConfiguration()
     });
+
+    // Check if models were found
+    if (!models || models.length === 0) {
+        vscode.window.showErrorMessage('No language models found. Please check your configuration.');
+        return '';
+    }    
     let chatResponse;
 
     const messages = [            
@@ -63,3 +74,24 @@ function getModelVendorConfiguration() {
 		return(ExtConf.get('jamcopilotpromptmanager.modelVendor'));
 	}
 }
+/*function showPromptAsHover()
+{
+    const suggestion = '{"command":"Save","taskTitle":"CreateReservEntryFor","taskExplanation":"Change procedure call substiting two last parameters by ReservEntry, as example. Important: Preserve original carriage returns from input. Be careful you are not returning the response with carriage  returns","inputIndications":"Convert AL procedure calling","inputExample":"        CrearReserva.CreateReservEntryFor(Database::\"Sales Line\",\n        LinVenta.\"Document Type\",\n        LinVenta.\"Document No.\",\n        newLabel,\n        0,\n        LinVenta.\"Line No.\",\n        LinVenta.\"Qty. per Unit of Measure\",\n        LinVenta.Quantity,\n        LinVenta.\"Quantity (Base)\",\n        newLabel,\n        \'ForLotNo\');\n","outputExample":"        ReservEntry.\"Lot No.\" := \'ForLotNo\';\n        CrearReserva.CreateReservEntryFor(Database::\"Sales Line\",\n        LinVenta.\"Document Type\",\n        LinVenta.\"Document No.\",\n        newLabel,\n        0,\n        LinVenta.\"Line No.\",\n        LinVenta.\"Qty. per Unit of Measure\",\n        LinVenta.Quantity,\n        LinVenta.\"Quantity (Base)\",\n        ReservEntry);","inputTest":"       CrearReserva.CreateReservEntryFor(Database::\"Sales Line\",\n        LinVenta.\"Document Type\",\n        LinVenta.\"Document No.\",\n        newLabel,\n        0,\n        LinVenta.\"Line No.\",\n        LinVenta.\"Qty. per Unit of Measure\",\n        LinVenta.Quantity,\n        LinVenta.\"Quantity (Base)\",\n        newLabel,\n        NewLotNo);\n"}'
+    const decorationType = vscode.window.createTextEditorDecorationType({
+        after: {
+          //contentText: ` ${suggestion.substring(0, 25) + '...'}`,
+          contentText: ` ${suggestion + '...'}`,
+          color: 'grey'
+        }
+      });
+    
+      // get the end of the line with the specified line number
+      const range = new vscode.Range(
+        new vscode.Position(0, 0),
+        new vscode.Position(0, 1000)
+      );
+    
+      const decoration = { range: range, hoverMessage: suggestion };
+    
+      vscode.window.activeTextEditor.setDecorations(decorationType, [decoration])
+}*/

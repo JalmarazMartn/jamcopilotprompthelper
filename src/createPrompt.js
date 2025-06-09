@@ -2,11 +2,11 @@ const vscode = require('vscode');
 let ExecNumber = 0;
 let HTMLContent = '';
 module.exports = {
-  createPromptView: async function (context) {
-    await createPromptView(context);
+  createPromptView: async function (context,prompt) {
+    await createPromptView(context,prompt);
   }
 }
-async function createPromptView(context) {
+async function createPromptView(context,prompt) {
   HTMLContent = await GetHTMLContent(context);
   const WebviewSteps = vscode.window.createWebviewPanel(
     'Copilot Prompt Manager',
@@ -16,7 +16,6 @@ async function createPromptView(context) {
       enableScripts: true
     }
   );
-
   WebviewSteps.webview.onDidReceiveMessage(
     async function (message) {
       let updatedHTML = '';
@@ -60,9 +59,14 @@ async function createPromptView(context) {
     outputExample: 'Enter your output example here...',
     inputTest: 'Enter your input test here...'
   };
+  let initialHTML = '';
+  initialHTML = replaceHTMLContent(HTMLContent, defaultPromptData);
+  if (prompt) {
+    // If a prompt is provided, replace the HTML content with the prompt data
+    initialHTML = replaceHTMLContent(HTMLContent, prompt);
+  }
 
-  // Use replaceHTMLContent to ensure all placeholders are properly set
-  const initialHTML = replaceHTMLContent(HTMLContent, defaultPromptData);
+  // Use replaceHTMLContent to ensure all placeholders are properly set  
   WebviewSteps.webview.html = initialHTML;
 }
 async function GetHTMLContent(context) {
