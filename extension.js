@@ -1,10 +1,14 @@
 const vscode = require('vscode');
+const { registerClipboardTool } = require('./src/clipboardTool.js');
 
 /**
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
     console.log('Extension "jamcopilotpromptmanager" is now active!');
+
+    // Registrar la LM tool del portapapeles
+    registerClipboardTool(context);
 
     let disposablePromptView = vscode.commands.registerCommand('jamcopilotpromptmanager.createPrompt', function () {
         const createPrompt = require('./src/createPrompt.js');

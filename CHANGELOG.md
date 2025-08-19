@@ -21,3 +21,8 @@ Another fixing release. This time with a more stable version of the extension.
 ### 1.0.4
 
 Add record of prompts selecting before and after code. Auto generate explation of change with only before and after situation.
+
+### 1.0.5
+
+- Configure the prompt to generate other prompts based on code changes.
+- New LLM Tool to allow agents access to clipboard.

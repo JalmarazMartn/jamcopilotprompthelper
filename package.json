@@ -3,7 +3,7 @@
     "displayName": "JAM Copilot Prompt Manager",
     "description": "Create and save new small prompts for co-pilot",
     "publisher": "JessAlmarazMartin",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "repository": "https://github.com/JalmarazMartn/jamcopilotprompthelper",
     "icon": "images/PromptManager.png",
     "engines": {
@@ -74,9 +74,40 @@
                     "default": "gpt-4o",
                     "enum": ["gpt-3.5-turbo", "gpt-4o-mini", "gpt-3.5","gpt-4","gpt-4o","o3-mini","claude-3.5-sonnet","gemini-2.0-flash"],
                     "description": "Family of language model to use"
+                },
+                "jamcopilotpromptmanager.promptOfPrompts": {
+                    "type": "array",
+                    "description": "Prompt to get other prompts, given the code before and after",                    
+                    "items": 
+                        {
+                            "type": "string"
+                        }
+                    ,
+                    "default": ["You are a code assistant that helps to create prompts for co-pilot. You will be given a code change and you will generate a prompt to apply the change in the code.",
+                    " The prompt should be clear and concise, focusing on the modifications made to the code.",
+                    " The prompt should be in a format that can be reused in future prompts and understandable by co-pilot to apply changes or suggestions.",
+                    "The inputs are the code with the label of before and the code with the label of after." ,
+                    " Explain the changes made in the code between Before section and After section." ],                    
+                    "editPresentation": "singlelineText"
+                    
                 }
             }
-        }
+        },
+        "languageModelTools": [
+            {
+                "name": "leer-portapapeles",
+                "tags": ["clipboard", "utilidades"],
+                "toolReferenceName": "leerPortapapeles",
+                "displayName": "Leer portapapeles",
+                "modelDescription": "Lee el contenido actual del portapapeles usando la API de VS Code.",
+                "canBeReferencedInPrompt": true,
+                "icon": "$(clippy)",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {}
+                }
+            }
+        ]
     },
     "scripts": {
         "lint": "eslint .",

@@ -49,6 +49,8 @@ When finish select modified code and execute from command paallete `JAM Copilot 
 
 [![Click here to watch video](https://upload.wikimedia.org/wikipedia/commons/4/40/Solid_color_YouTube_logo_%282013-2017%29.png)](https://www.youtube.com/watch?v=bOd0HSUjIws)
 
+#### New LLM Tool
+A new LLM Tool is available to allow agents access to the clipboard. This tool can be used to read the clipboard from an automated agent.
 
 ## Requirements
 
@@ -59,6 +61,14 @@ This extension requires Visual Studio Code version 1.70.0 or higher.
 This extension contributes the following settings:
 
 * `jamcopilotpromptmanager.modelFamily`: Specifies the family of language model to use. Default is `gpt-4o`.
+* `jamcopilotpromptmanager.promptOfPrompts`: Specifies the prompt to generate other prompts based on code changes. Default is:
+  ```
+  You are a code assistant that helps to create prompts for co-pilot. You will be given a code change and you will generate a prompt to apply the change in the code.
+  The prompt should be clear and concise, focusing on the modifications made to the code.
+  The prompt should be in a format that can be reused in future prompts and understandable by co-pilot to apply changes or suggestions.
+  The inputs are the code with the label of before and the code with the label of after.
+  Explain the changes made in the code between Before section and After section.
+  ```
 
 ## Known Issues
 

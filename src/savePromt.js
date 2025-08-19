@@ -1,22 +1,18 @@
 const vscode = require('vscode');
 let prevSelection = '';
 module.exports = {
-    savePrompt: async function(prompt)
-    {
+    savePrompt: async function (prompt) {
         await savePrompt(prompt);
     },
-    openPrompt: async function()
-    {
+    openPrompt: async function () {
         return await openPrompt();
     },
-    beginAutomatePtompt: function()
-    {
+    beginAutomatePtompt: function () {
         beginAutomatePtompt();
     },
-    endAutomatePtompt: async function(context)
-    {
+    endAutomatePtompt: async function (context) {
         await endAutomatePtompt(context);
-    }    
+    }
 
 }
 function savePrompt(prompt) {
@@ -43,18 +39,17 @@ async function openPrompt() {
         }
     };
     const uri = await vscode.window.showOpenDialog(options);
-        if (uri) {
-            const prompt = fs.readFileSync(uri[0].fsPath);
-            const promptJson = JSON.parse(prompt.toString());
-            return promptJson;
-        }
+    if (uri) {
+        const prompt = fs.readFileSync(uri[0].fsPath);
+        const promptJson = JSON.parse(prompt.toString());
+        return promptJson;
+    }
 }
-function beginAutomatePtompt()
-{    
+function beginAutomatePtompt() {
     prevSelection = getEditorSelectedText();
     //save in envoriment variable
-    vscode.commands.executeCommand('setContext', 'jamcopilotpromptmanager.enableEndAutomate', true);        
-    
+    vscode.commands.executeCommand('setContext', 'jamcopilotpromptmanager.enableEndAutomate', true);
+
 }
 function getEditorSelectedText() {
     const seleccion = vscode.window.activeTextEditor.selection;
@@ -62,28 +57,24 @@ function getEditorSelectedText() {
     return selectText;
 }
 
-async function endAutomatePtompt(context)
-{    
+async function endAutomatePtompt(context) {
     await vscode.window.withProgress({
         cancellable: true,
         location: vscode.ProgressLocation.Notification,
         title: 'Generating prompt explanation...',
-    }, async (progress) =>  {    
+    }, async (progress) => {
         progress.report({ message: 'Calling Copilot for explanation with the prev selection and current selection' });
-    const selectText = getEditorSelectedText();
-    vscode.commands.executeCommand('setContext', 'jamcopilotpromptmanager.enableEndAutomate', false);        
-    let prompt = await getExplanationFromCopilot(selectText);    
-    const createPrompt = require('./createPrompt.js');
-    await createPrompt.createPromptView(context, prompt);
-    //vscode.workspace.onDidChangeTextDocument example
+        const selectText = getEditorSelectedText();
+        vscode.commands.executeCommand('setContext', 'jamcopilotpromptmanager.enableEndAutomate', false);
+        let prompt = await getExplanationFromCopilot(selectText);
+        const createPrompt = require('./createPrompt.js');
+        await createPrompt.createPromptView(context, prompt);
+        //vscode.workspace.onDidChangeTextDocument example
     });
 }
 
 async function getExplanationFromCopilot(selectText) {
-    const thePromptsOfPrompts = 'The inputs are the code with the label of before and the code with the label of after.' +
-        ' Explain the changes made in the code between Before section and After section.' +
-        ' The explanation must be clear and concise, focusing on the modifications made to the code.' +
-        ' The explanation should be in a format that can be reused in future prompts and understandable by co-pilot to apply changen or suggestions.';
+    const thePromptsOfPrompts = getPromptOfPrompts();
     let prompt = {
         taskTitle: 'Automate Prompt explnation',
         taskExplanation: thePromptsOfPrompts + ' Before: ' + prevSelection + ' After: ' + selectText,
@@ -103,4 +94,21 @@ async function getExplanationFromCopilot(selectText) {
         command: ''
     };
     return prompt;
+}
+function getPromptOfPrompts() {
+    const configuration = vscode.workspace.getConfiguration('jamcopilotpromptmanager');
+    const promptOfPrompts = configuration.get('promptOfPrompts');
+    let customPromptOfPrompts = '';
+    if (promptOfPrompts) {
+        for (let index = 0; index < promptOfPrompts.length; index++) {
+            const element = promptOfPrompts[index];
+            customPromptOfPrompts += element + '\n';
+        }
+        return customPromptOfPrompts;
+    } else {
+        return 'The inputs are the code with the label of before and the code with the label of after.' +
+            ' Explain the changes made in the code between Before section and After section.' +
+            ' The explanation must be clear and concise, focusing on the modifications made to the code.' +
+            ' The explanation should be in a format that can be reused in future prompts and understandable by co-pilot to apply changes or suggestions.';
+    }
 }
