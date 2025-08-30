@@ -96,10 +96,10 @@
         "languageModelTools": [
             {
                 "name": "leer-portapapeles",
-                "tags": ["clipboard", "utilidades"],
+                "tags": ["clipboard", "utilidades", "leer portapapeles", "read clipboard", "clipboard content","contenido del portapapeles"],
                 "toolReferenceName": "leerPortapapeles",
-                "displayName": "Leer portapapeles",
-                "modelDescription": "Lee el contenido actual del portapapeles usando la API de VS Code.",
+                "displayName": "Leer portapapeles-Read clipboard",
+                "modelDescription": "Lee el contenido actual del portapapeles usando la API de VS Code. Read the current clipboard content using the VS Code API.",
                 "canBeReferencedInPrompt": true,
                 "icon": "$(clippy)",
                 "inputSchema": {
