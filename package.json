@@ -3,7 +3,7 @@
     "displayName": "JAM Copilot Prompt Manager",
     "description": "Create and save new small prompts for co-pilot",
     "publisher": "JessAlmarazMartin",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "repository": "https://github.com/JalmarazMartn/jamcopilotprompthelper",
     "icon": "images/PromptManager.png",
     "engines": {
@@ -33,6 +33,12 @@
                 "command": "jamcopilotpromptmanager.endAutomatePtompt",
                 "title": "JAM Copilot Prompt Manager: End prompt recording"
             }
+               ,
+               {
+                   "command": "jamcopilotprompthelper.bringPromptToInstructions",
+                   "title": "Bring Prompt To Instructions",
+                   "category": "JamCopilotPromptHelper"
+               }
         ],
         "menus": {
             "editor/context": [

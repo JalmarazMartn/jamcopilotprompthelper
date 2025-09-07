@@ -49,6 +49,26 @@ When finish select modified code and execute from command paallete `JAM Copilot 
 
 [![Click here to watch video](https://upload.wikimedia.org/wikipedia/commons/4/40/Solid_color_YouTube_logo_%282013-2017%29.png)](https://www.youtube.com/watch?v=bOd0HSUjIws)
 
+### Command: Bring Prompt To Instructions
+
+This extension now includes the command `Bring Prompt To Instructions`.
+
+**What does it do?**
+
+It allows you to select a markdown file and automatically copy it to the `.github/instructions` folder inside your workspace. If the folder does not exist, it will be created automatically.
+
+**How to use it?**
+
+1. Open the VS Code command palette (`Ctrl+Shift+P`).
+2. Search for and select `Bring Prompt To Instructions`.
+3. Choose the markdown file you want to copy.
+4. The file will be copied to `.github/instructions` in your project.
+
+**Notes:**
+- Only files with the `.md` extension can be selected.
+- If the `.github/instructions` folder does not exist, it will be created automatically.
+
+
 #### New LLM Tool
 A new LLM Tool is available to allow agents access to the clipboard. This tool can be used to read the clipboard from an automated agent.
 

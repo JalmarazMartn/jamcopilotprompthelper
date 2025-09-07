@@ -1,5 +1,6 @@
 const vscode = require('vscode');
 const { registerClipboardTool } = require('./src/clipboardTool.js');
+const { bringPromptToInstructions } = require('./src/bringPropmtToinstructions.js');
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -35,6 +36,10 @@ function activate(context) {
     });
     context.subscriptions.push(disposableEndAutomatePtompt);
 
+    let disposable = vscode.commands.registerCommand('jamcopilotprompthelper.bringPromptToInstructions', async function () {
+        await bringPromptToInstructions();
+    });
+    context.subscriptions.push(disposable);
 }
 
 function deactivate() {}
