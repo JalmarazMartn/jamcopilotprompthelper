@@ -3,7 +3,7 @@
     "displayName": "JAM Copilot Prompt Manager",
     "description": "Create and save new small prompts for co-pilot",
     "publisher": "JessAlmarazMartin",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "repository": "https://github.com/JalmarazMartn/jamcopilotprompthelper",
     "icon": "images/PromptManager.png",
     "engines": {
@@ -101,16 +101,27 @@
         },
         "languageModelTools": [
             {
-                "name": "leer-portapapeles",
-                "tags": ["clipboard", "utilidades", "leer portapapeles", "read clipboard", "clipboard content","contenido del portapapeles"],
-                "toolReferenceName": "leerPortapapeles",
-                "displayName": "Leer portapapeles-Read clipboard",
-                "modelDescription": "Lee el contenido actual del portapapeles usando la API de VS Code. Read the current clipboard content using the VS Code API.",
+                "name": "clipboardTool",
+                "tags": ["clipboard", "utilidades", "leer portapapeles", "read clipboard", "clipboard content","contenido del portapapeles","copiar al portapapeles","Copy to clipboard"],
+                "toolReferenceName": "clipboardTool",
+                "displayName": "read fromclipboard - copy to clipboard",
+                "modelDescription": "Read from clipboard and copy to clipboard. Lee el portapapeles y copia al portapapeles.",
                 "canBeReferencedInPrompt": true,
                 "icon": "$(clippy)",
                 "inputSchema": {
                     "type": "object",
-                    "properties": {}
+                    "properties": {
+                        "operation": {
+                            "type": "string",
+                            "enum": ["read", "copy"],
+                            "description": "Operation to perform: 'read' to get clipboard content, 'copy' to set clipboard content."
+                        },
+                        "text": {
+                            "type": "string",
+                            "description": "Text to copy to clipboard (required for 'copy' operation)."
+                        }
+                    },
+                    "required": ["operation"]
                 }
             }
         ]

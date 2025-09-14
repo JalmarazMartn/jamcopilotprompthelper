@@ -22,8 +22,6 @@ Another fixing release. This time with a more stable version of the extension.
 
 Add record of prompts selecting before and after code. Auto generate explation of change with only before and after situation.
 
-
-
 ### 1.0.5
 
 - Configure the prompt to generate other prompts based on code changes.
@@ -31,3 +29,6 @@ Add record of prompts selecting before and after code. Auto generate explation o
 
 ### 0.0.6
 - New command: Bring Prompt To Instructions. Allows you to select a markdown file and copy it to the .github/instructions folder in your workspace.
+
+### 0.0.7
+And now the agents can copy content to your clipboard!! Clipboard LLM tool modification.

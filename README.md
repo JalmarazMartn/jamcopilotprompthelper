@@ -70,7 +70,7 @@ It allows you to select a markdown file and automatically copy it to the `.githu
 
 
 #### New LLM Tool
-A new LLM Tool is available to allow agents access to the clipboard. This tool can be used to read the clipboard from an automated agent.
+A new LLM Tool is available to allow agents access to the clipboard. This tool can be used to read and copy content to the clipboard from an automated agent.
 
 ## Requirements
 
